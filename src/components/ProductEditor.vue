@@ -169,6 +169,7 @@ export default {
         imagePreview.value = props.product.image
       }
 
+      // Initialize CKEditor
       if (window.CKEDITOR && editor.value) {
         ckEditorInstance = window.CKEDITOR.replace(editor.value, {
           height: 300,

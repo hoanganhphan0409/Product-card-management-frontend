@@ -6,10 +6,9 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import LoginPage from './components/LoginPage.vue'
 import Dashboard from './components/Dashboard.vue'
-
 
 export default {
   name: 'App',
@@ -19,13 +18,24 @@ export default {
   },
   setup() {
     const isLoggedIn = ref(false)
+    
+    onMounted(() => {
+      const token = localStorage.getItem('token')
+      const user = localStorage.getItem('user')
+      
+      if (token && user) {
+        isLoggedIn.value = true
+      }
+    })
 
-    const handleLogin = () => {
+    const handleLogin = (userData) => {
       isLoggedIn.value = true
     }
 
     const handleLogout = () => {
       isLoggedIn.value = false
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
     }
 
     return {

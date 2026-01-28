@@ -18,37 +18,65 @@ apiClient.interceptors.request.use(config => {
   return config
 })
 
+// Response interceptor for error handling
+apiClient.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token')
+      window.location.href = '/'
+    }
+    return Promise.reject(error)
+  }
+)
+
 export default {
   // Auth APIs
-  login(email, password) {
-    return apiClient.post('/auth/login', { email, password })
+  async login(email, password) {
+    const response = await apiClient.post('/auth/login', { email, password })
+    return response.data
   },
-  register(fullName, email, password) {
-    return apiClient.post('/auth/register', { fullName, email, password })
+  
+  async register(fullName, email, password) {
+    const response = await apiClient.post('/auth/register', { fullName, email, password })
+    return response.data
   },
-  forgotPassword(email) {
-    return apiClient.post('/auth/forgot-password', { email })
+  
+  async forgotPassword(email) {
+    const response = await apiClient.post('/auth/forgot-password', { email })
+    return response.data
   },
 
   // Product Card APIs
-  getAllProductCards(search, category) {
-    return apiClient.get('/product-cards', {
-      params: { search, category }
+  async getAllProductCards(search = '', category = '') {
+    const response = await apiClient.get('/product-cards', {
+      params: { search, category: category === 'all' ? '' : category }
     })
+    return response.data
   },
-  getProductCardById(id) {
-    return apiClient.get(`/product-cards/${id}`)
+  
+  async getProductCardById(id) {
+    const response = await apiClient.get(`/product-cards/${id}`)
+    return response.data
   },
-  createProductCard(data) {
-    return apiClient.post('/product-cards', data)
+  
+  async createProductCard(data) {
+    const response = await apiClient.post('/product-cards', data)
+    return response.data
   },
-  updateProductCard(id, data) {
-    return apiClient.put(`/product-cards/${id}`, data)
+  
+  async updateProductCard(id, data) {
+    const response = await apiClient.put(`/product-cards/${id}`, data)
+    return response.data
   },
-  deleteProductCard(id) {
-    return apiClient.delete(`/product-cards/${id}`)
+  
+  async deleteProductCard(id) {
+    const response = await apiClient.delete(`/product-cards/${id}`)
+    return response.data
   },
-  getCategories() {
-    return apiClient.get('/product-cards/categories')
+  
+  async getCategories() {
+    const response = await apiClient.get('/product-cards/categories')
+    return response.data
   }
 }

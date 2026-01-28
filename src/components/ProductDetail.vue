@@ -22,6 +22,18 @@
         
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-600">Danh mục</p>
+            <p class="text-lg font-semibold">{{ product.category }}</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-600">Giá</p>
+            <p class="text-lg font-semibold text-blue-600">${{ product.price }}</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-sm text-gray-600">Số lượng kho</p>
+            <p class="text-lg font-semibold">{{ product.stock }}</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
             <p class="text-sm text-gray-600">Trạng thái</p>
             <p class="text-lg font-semibold text-green-600">
               {{ product.stock > 0 ? 'Còn hàng' : 'Hết hàng' }}
@@ -31,9 +43,10 @@
 
         <div class="border-t pt-4">
           <h3 class="text-lg font-semibold mb-3">Mô tả chi tiết</h3>
-          <div class="text-gray-700 whitespace-pre-wrap">
-            {{ product.description || 'Chưa có mô tả' }}
-          </div>
+          <div 
+            class="text-gray-700 prose max-w-none"
+            v-html="decodeHtml(product.description || 'Chưa có mô tả')"
+          />
         </div>
       </div>
     </div>
@@ -49,6 +62,13 @@ export default {
       required: true
     }
   },
-  emits: ['close']
+  emits: ['close'],
+  methods: {
+    decodeHtml(html) {
+      const txt = document.createElement('textarea')
+      txt.innerHTML = html
+      return txt.value
+    }
+  }
 }
 </script>
